@@ -89,3 +89,36 @@
 </ol>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/raw_window_1h.png?hl=zh-cn" alt="对未来 1 小时的一次预测。"></p>
 <p>本部分的剩余内容会定义 <code>WindowGenerator</code> 类。此类可以：</p>
+<ol>
+<li>处理如上图所示的索引和偏移量。</li>
+<li>将特征窗口拆分为 <code>(features, labels)</code> 对。</li>
+<li>绘制结果窗口的内容。</li>
+<li>使用 <a href="https://tensorflow.google.cn/api_docs/python/tf/data/Dataset?hl=zh-cn"><code>tf.data.Dataset</code></a> 从训练、评估和测试数据高效生成这些窗口的批次。</li>
+</ol>
+<h3>1.索引和偏移量</h3>
+<p>首先创建 <code>WindowGenerator</code> 类。<code>__init__</code> 方法包含输入和标签索引的所有必要逻辑。</p>
+<p>它还将训练、评估和测试 DataFrame 作为输出。这些稍后将被转换为窗口的 <a href="https://tensorflow.google.cn/api_docs/python/tf/data/Dataset?hl=zh-cn"><code>tf.data.Dataset</code></a>。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B4%A2%E5%BC%95%E5%92%8C%E5%81%8F%E7%A7%BB%E9%87%8F.jpg">
+<P>下面是創建本部分開頭圖表中所示的兩個窗口的代碼:</P>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B4%A2%E5%BC%95%E5%92%8C%E5%81%8F%E7%A7%BB%E9%87%8F2.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B4%A2%E5%BC%95%E5%92%8C%E5%81%8F%E7%A7%BB%E9%87%8F3.png">
+<h3>2.拆分</h3>
+<p><img src="https://tensorflow.google.cn/static/tutorials/structured_data/images/split_window.png?hl=zh-cn" alt="初始窗口都是连续的样本，这会将其拆分成一个（输入，标签）对"></p>
+<p>此图不显示数据的 <code>features</code> 轴，但此 <code>split_window</code> 函数还会处理 <code>label_columns</code>，因此可以将其用于单输出和多输出样本。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8B%86%E5%88%861.png">
+<P>試試以下代碼:</P>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8B%86%E5%88%862.png">
+<p>通常，TensorFlow 中的数据会被打包到数组中，其中最外层索引是交叉样本（“批次”维度）。中间索引是“时间”和“空间”（宽度、高度）维度。最内层索引是特征。</p>
+<p>上面的代码使用了三个 7 时间步骤窗口的批次，每个时间步骤有 19 个特征。它将其拆分成一个 6 时间步骤的批次、19 个特征输入和一个 1 时间步骤 1 特征的标签。该标签仅有一个特征，因为 <code>WindowGenerator</code> 已使用 <code>label_columns=['T (degC)']</code> 进行了初始化。最初，本教程将构建预测单个输出标签的模型。</p>
+<h3>3.繪圖</h3>
+<p>下面是一個繪圖方法，可已對拆分窗口進行簡單可視化:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B9%AA%E5%9C%961.jpg">
+<p>此繪圖根據項目引用的時間來對齊輸入、標籤和(稍後的)預測:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B9%AA%E5%9C%962.jpg">
+<p>你可以繪製其他列，但是樣本窗口w2配置僅包含T(degC)列的標籤。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B9%AA%E5%9C%963.jpg">
+<h3>創建tf.data.Dataset</h3>
+<p>最后，此 make_dataset法将获取时间序列 DataFrame 并使用 tf.keras.utils.timeseries_dataset_from_array函数将其转换为 (input_window, label_window) 对的 tf.data.Dataset。</p>
+
+
+
