@@ -117,7 +117,7 @@
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B9%AA%E5%9C%962.jpg">
 <p>你可以繪製其他列，但是樣本窗口w2配置僅包含T(degC)列的標籤。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B9%AA%E5%9C%963.jpg">
-<h3>創建tf.data.Dataset</h3>
+<h4>4.創建tf.data.Dataset</h4>
 <p>最后，此 <code>make_dataset</code> 方法将获取时间序列 DataFrame 并使用 <a href="https://tensorflow.google.cn/api_docs/python/tf/keras/utils/timeseries_dataset_from_array?hl=zh-cn"><code>tf.keras.utils.timeseries_dataset_from_array</code></a> 函数将其转换为 <code>(input_window, label_window)</code> 对的 <a href="https://tensorflow.google.cn/api_docs/python/tf/data/Dataset?hl=zh-cn"><code>tf.data.Dataset</code></a>。</p>
 
 
