@@ -75,8 +75,8 @@
 </ul>
 <p>本教程构建了各种模型（包括线性、DNN、CNN 和 RNN 模型），并将它们用于以下两种情况：</p>
 <ul>
-<li><em>单输出</em>和<em>多输出</em>预测。</li>
-<li><em>单时间步骤</em>和<em>多时间步骤</em>预测。</li>
+<li>单输出和多输出预测。</li>
+<li>单时间步骤和多时间步骤预测。</li>
 </ul>
 <p>本部分重点介绍实现数据窗口化，以便将其重用到上述所有模型。</p>
 <p>根据任务和模型类型，您可能需要生成各种数据窗口。下面是一些示例：</p>
@@ -84,3 +84,8 @@
 <li>例如，要在给定 24 小时历史记录的情况下对未来 24 小时作出一次预测，可以定义如下窗口：</li>
 </ol>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/raw_window_24h.png?hl=zh-cn" alt="对未来 24 小时的一次预测。"></p>
+<ol>
+<li>给定 6 小时的历史记录，对未来 1 小时作出一次预测的模型将需要类似下面的窗口：</li>
+</ol>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/raw_window_1h.png?hl=zh-cn" alt="对未来 1 小时的一次预测。"></p>
+<p>本部分的剩余内容会定义 <code>WindowGenerator</code> 类。此类可以：</p>
