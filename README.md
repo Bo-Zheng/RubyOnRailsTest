@@ -119,6 +119,106 @@
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B9%AA%E5%9C%963.jpg">
 <h4>4.創建tf.data.Dataset</h4>
 <p>最后，此 <code>make_dataset</code> 方法将获取时间序列 DataFrame 并使用 <a href="https://tensorflow.google.cn/api_docs/python/tf/keras/utils/timeseries_dataset_from_array?hl=zh-cn"><code>tf.keras.utils.timeseries_dataset_from_array</code></a> 函数将其转换为 <code>(input_window, label_window)</code> 对的 <a href="https://tensorflow.google.cn/api_docs/python/tf/data/Dataset?hl=zh-cn"><code>tf.data.Dataset</code></a>。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%89%B5%E5%BB%BA1.png">
+<p><code>WindowGenerator</code> 对象包含训练、验证和测试数据。</p>
+<p>使用您之前定义的 <code>make_dataset</code> 方法添加属性以作为 <a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset?hl=zh-cn"><code>tf.data.Dataset</code></a> 访问它们。此外，添加一个标准样本批次以便于访问和绘图：</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%89%B5%E5%BB%BA2.png">
+<p>现在，<code>WindowGenerator</code> 对象允许您访问 <a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset?hl=zh-cn"><code>tf.data.Dataset</code></a> 对象，因此您可以轻松迭代数据。</p>
+<p><a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset?hl=zh-cn#element_spec"><code>Dataset.element_spec</code></a> 属性会告诉您数据集元素的结构、数据类型和形状。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%89%B5%E5%BB%BA3.png">
+<p>在<code>Dataset</code>上進行迭代會產生具體批次:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%89%B5%E5%BB%BA4.png">
+<h2>單步模型</h2>
+<p>基于此类数据能够构建的最简单模型，能够仅根据当前条件预测单个特征的值，即未来的一个时间步骤（1 小时）。</p>
+<p>因此，从构建模型开始，预测未来 1 小时的 <code>T (degC)</code> 值。</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/narrow_window.png?hl=zh-cn" alt="预测下一个时间步骤"></p>
+<p>配置 <code>WindowGenerator</code> 对象以生成下列单步 <code>(input, label)</code> 对：</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AD%A5%E6%A8%A1%E5%9E%8B1.png">
+<h3>基線</h3>
+<p>在构建可训练模型之前，最好将性能基线作为与以后更复杂的模型进行比较的点。</p>
+<p>第一个任务是在给定所有特征的当前值的情况下，预测未来 1 小时的温度。当前值包括当前温度。</p>
+<p>因此，从仅返回当前温度作为预测值的模型开始，预测“无变化”。这是一个合理的基线，因为温度变化缓慢。当然，如果您对更远的未来进行预测，此基线的效果就不那么好了。</p>
+<p>將輸入發送到輸出</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A1.png">
+<p>實例畫並評估此模型:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A2.png">
+<p>上面的代码打印了一些性能指标，但这些指标并没有使您对模型的运行情况有所了解。</p>
+<p><code>WindowGenerator</code> 有一种绘制方法，但只有一个样本，绘图不是很有趣。</p>
+<p>因此，创建一个更宽的 <code>WindowGenerator</code> 来一次生成包含 24 小时连续输入和标签的窗口。新的 <code>wide_window</code> 变量不会更改模型的运算方式。模型仍会根据单个输入时间步骤对未来 1 小时进行预测。这里 <code>time</code> 轴的作用类似于 <code>batch</code> 轴：每个预测都是独立进行的，时间步骤之间没有交互：</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A3.png">
+<p>此扩展窗口可以直接传递到相同的 <code>baseline</code> 模型，而无需修改任何代码。能做到这一点是因为输入和标签具有相同数量的时间步骤，并且基线只是将输入转发至输出：</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/last_window.png?hl=zh-cn" alt="对未来 1 小时进行一次预测，每小时一次。"></p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A4.png">
+<p>通過繪製基線模型的預測值，可以注意到只是標籤向右移動了一小時:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A5.png">
+<p>在上面三个样本的绘图中，单步模型运行了 24 个小时。这需要一些解释：</p>
+<ul>
+<li>蓝色的 <code>Inputs</code> 行显示每个时间步骤的输入温度。模型会接收所有特征，而该绘图仅显示温度。</li>
+<li>绿色的 <code>Labels</code> 点显示目标预测值。这些点在预测时间，而不是输入时间显示。这就是为什么标签范围相对于输入移动了 1 步。</li>
+<li>橙色的 <code>Predictions</code> 叉是模型针对每个输出时间步骤的预测。如果模型能够进行完美预测，则预测值将直接落在 <code>Labels</code> 上。</li>
+</ul>
+<h3>線性模型</h3>
+<p>可以应用于此任务的最简单的<strong>可训练</strong>模型是在输入和输出之间插入线性转换。在这种情况下，时间步骤的输出仅取决于该步骤：</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/narrow_window.png?hl=zh-cn" alt="单步预测"></p>
+<p>没有设置 <code>activation</code> 的 <a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Dense?hl=zh-cn"><code>tf.keras.layers.Dense</code></a> 层是线性模型。层仅会将数据的最后一个轴从 <code>(batch, time, inputs)</code> 转换为 <code>(batch, time, units)</code>；它会单独应用于 <code>batch</code> 和 <code>time</code> 轴的每个条目。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B7%9A%E6%80%A7%E6%A8%A1%E5%9E%8B1.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B7%9A%E6%80%A7%E6%A8%A1%E5%9E%8B2.png">
+<p>本教成訓練許多模型，因此將訓練過程打包到一個函數中:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B7%9A%E6%80%A7%E6%A8%A1%E5%9E%8B3.png">
+<p>訓練模型並評估其性能:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B7%9A%E6%80%A7%E6%A8%A1%E5%9E%8B4.png">
+<p>与 <code>baseline</code> 模型类似，可以在宽度窗口的批次上调用线性模型。使用这种方式，模型会在连续的时间步骤上进行一系列独立预测。<code>time</code> 轴的作用类似于另一个 <code>batch</code> 轴。在每个时间步骤上，预测之间没有交互。</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/wide_window.png?hl=zh-cn" alt="单步预测"></p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B7%9A%E6%80%A7%E6%A8%A1%E5%9E%8B5.png">
+<p>下面是 <code>wide_widow</code> 上它的样本预测绘图。请注意，在许多情况下，预测值显然比仅返回输入温度更好，但在某些情况下则会更差：</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B7%9A%E6%80%A7%E6%A8%A1%E5%9E%8B6.png">
+<p>線性模型的優點之一是他們相對易於解釋。您可以拉取層的權重，並呈現分配給每個輸入的權重:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E7%B7%9A%E6%80%A7%E6%A8%A1%E5%9E%8B7.png">
+<p>有的模型甚至不會將大多數權重放在輸入<code>T(degC)</code>上。這是隨機初始化的風險之一。</p>
+<h3>密集</h3>
+<p>在应用实际运算多个时间步骤的模型之前，值得研究一下更深、更强大的单输入步骤模型的性能。</p>
+<p>下面是一个与 <code>linear</code> 模型类似的模型，只不过它在输入和输出之间堆叠了几个 <code>Dense</code> 层： </p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%861.png">
+<h3>多步密集</h3>
+<p>单时间步骤模型没有其输入的当前值的上下文。它看不到输入特征随时间变化的情况。要解决此问题，模型在进行预测时需要访问多个时间步骤：</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/conv_window.png?hl=zh-cn" alt="每次预测都使用三个时间步骤。"></p>
+<p><code>baseline</code>、<code>linear</code> 和 <code>dense</code> 模型会单独处理每个时间步骤。在这里，模型将接受多个时间步骤作为输入，以生成单个输出。</p>
+<p>创建一个 <code>WindowGenerator</code>，它将生成 3 小时输入和 1 小时标签的批次：</p>
+<p>请注意，<code>Window</code> 的 <code>shift</code> 参数与两个窗口的末尾相关。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%862.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%863.png">
+<p>您可以通過添加<code>tf.keras.layers.Flatten作為模型的第一層，在多輸入步驟窗口上訓練<code>dense</code>模型:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%864.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%865.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%866.png">
+<p>此方法的主要缺點是，生成的模型只能在具有此形狀的輸入窗口上執行。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%867.png">
+<p>下一部分中的捲積模型將解決這個問題。</p>
+<h3>捲積神經網路</h3>
+<p>卷积层 (<a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Conv1D?hl=zh-cn"><code>tf.keras.layers.Conv1D</code></a>) 也需要多个时间步骤作为每个预测的输入。</p>
+<p>下面的模型与 <code>multi_step_dense</code> <strong>相同</strong>，使用卷积进行了重写。</p>
+<p>请注意以下变化：</p>
+<ul>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Flatten?hl=zh-cn"><code>tf.keras.layers.Flatten</code></a> 和第一个 <a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Dense?hl=zh-cn"><code>tf.keras.layers.Dense</code></a> 替换成了 <a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Conv1D?hl=zh-cn"><code>tf.keras.layers.Conv1D</code></a>。</li>
+<li>由于卷积将时间轴保留在其输出中，不再需要 <a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Reshape?hl=zh-cn"><code>tf.keras.layers.Reshape</code></a>。</li>
+</ul>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8D%B2%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF1.png">
+<p>在一個樣本批次上運行上述模型，以查看模型是否生成了具有預期形狀的輸出:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8D%B2%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF2.png">
+<p>在 <code>conv_window</code> 上训练和评估上述模型，它应该提供与 <code>multi_step_dense</code> 模型类似的性能。</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8D%B2%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF3.png">
+<p>此 <code>conv_model</code> 和 <code>multi_step_dense</code> 模型的区别在于，<code>conv_model</code> 可以在任意长度的输入上运行。卷积层应用于输入的滑动窗口：</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/wide_conv_window.png?hl=zh-cn" alt="在序列上执行卷积模型"></p>
+<p>如果在较宽的输入上运行此模型，它将生成较宽的输出：</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8D%B2%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF4.png">
+<p>请注意，输出比输入短。要进行训练或绘图，需要标签和预测具有相同长度。因此，构建 <code>WindowGenerator</code> 以使用一些额外输入时间步骤生成宽窗口，从而使标签和预测长度匹配： </p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8D%B2%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF5.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8D%B2%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF6.png">
+<p>现在，您可以在更宽的窗口上绘制模型的预测。请注意第一个预测之前的 3 个输入时间步骤。这里的每个预测都基于之前的 3 个时间步骤：</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%8D%B2%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF7.png">
+
+
+
 
 
 
