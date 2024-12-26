@@ -251,7 +251,7 @@
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%862-2.png">
 <h4>RNN</h4>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/RNN2-1.png">
-*********************<h4>高級：殘差連接</h4>
+<h4>高級：殘差連接</h4>
 <p>先前的 <code>Baseline</code> 模型利用了以下事實：序列在時間步驟之間不會劇烈變化。到目前為止，本教程中訓練的每個模型都進行了隨機初始化，然後必須學習輸出相較上一個時間步驟改變較小這一知識。</p>
 <p>儘管您可以通過仔細初始化來解決此問題，但將此問題構建到模型結構中則更加簡單。</p>
 <p>在時間序列分析中構建的模型，通常會預測下一個時間步驟中的值會如何變化，而非直接預測下一個值。類似地，深度學習中的<a href="https://arxiv.org/abs/1512.03385" class="external">殘差網絡</a>（或 ResNet）指的是，每一層都會添加到模型的累計結果中的架構。</p>
@@ -331,10 +331,10 @@
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD2.png">
 <p>從密集模型到卷積模型和循環模型，所獲得的增益只有百分之幾（如果有的話），而自回歸模型的表現顯然更差。因此，在<strong>這個</strong>問題上使用這些更複雜的方法可能並不值得，但如果不嘗試就無從知曉，而且這些模型可能會對<strong>您的</strong>問題有所幫助。</p>
 <h2>可能遇到的問題<h2>
-<p>在性能的部份程式碼可能因新舊版本而發生錯誤，如下圖所示:</p>
+<h4>在性能的部份程式碼可能因新舊版本而發生錯誤，如下圖所示:</h4>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202024-12-23%20202502.png">
-<p>解決方法</p>
-<p>使用 <code>metric_name = 'compile_metrics'</code> 來設定指標名稱，並根據此名稱取得 <code>metric_index</code>。</p>
+<h4>解決方法</h4>
+<h4>使用 <code>metric_name = 'compile_metrics'</code> 來設定指標名稱，並根據此名稱取得 <code>metric_index</code>。</h4>
 <h2>後續步驟</h2>
 <p>本教程是使用 TensorFlow 進行時間序列預測的簡單介紹。</p>
 <p>要了解更多信息，請參閱：</p>
