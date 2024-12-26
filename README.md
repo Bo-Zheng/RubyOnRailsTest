@@ -228,7 +228,6 @@
 </ol>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/lstm_many_window.png?hl=zh-cn" alt="lstm在每個時間步後進行預測"></p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF1.png">
-
 <p><code>return_sequences=True</code> 時，模型一次可以在 24 小時的資料上進行訓練。</p>
 <p>注：這將對模型的性能給出悲觀看法。在第一個時間步驟中，模型無法訪問之前的步驟，因此無法比之前展示的簡單 <code>linear</code> 和 <code>dense</code> 模型表現得更好。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF2.png">
@@ -252,101 +251,99 @@
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%862-2.png">
 <h4>RNN</h4>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/RNN2-1.png">
-*********************<h4>高级：残差连接</h4>
-<p>先前的 <code>Baseline</code> 模型利用了以下事实：序列在时间步骤之间不会剧烈变化。到目前为止，本教程中训练的每个模型都进行了随机初始化，然后必须学习输出相较上一个时间步骤改变较小这一知识。</p>
-<p>尽管您可以通过仔细初始化来解决此问题，但将此问题构建到模型结构中则更加简单。</p>
-<p>在时间序列分析中构建的模型，通常会预测下一个时间步骤中的值会如何变化，而非直接预测下一个值。类似地，深度学习中的<a href="https://arxiv.org/abs/1512.03385" class="external">残差网络</a>（或 ResNet）指的是，每一层都会添加到模型的累计结果中的架构。</p>
-<p>这就是利用“改变应该较小”这一知识的方式。</p>
-<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/residual.png?hl=zh-cn" alt="带有残差连接的模型"></p>
-<p>本质上，这将初始化模型以匹配 <code>Baseline</code>。对于此任务，它可以帮助模型更快收敛，且性能稍好。</p>
-<p>该方法可以与本教程中讨论的任何模型结合使用。</p>
-<p>这里将它应用于 LSTM 模型，请注意 <a href="https://www.tensorflow.org/api_docs/python/tf/keras/initializers/Zeros?hl=zh-cn"><code>tf.initializers.zeros</code></a> 的使用，以确保初始的预测改变很小，并且不会压制残差连接。此处的梯度没有破坏对称性的问题，因为 <code>zeros</code> 仅用于最后一层。</p>
+*********************<h4>高級：殘差連接</h4>
+<p>先前的 <code>Baseline</code> 模型利用了以下事實：序列在時間步驟之間不會劇烈變化。到目前為止，本教程中訓練的每個模型都進行了隨機初始化，然後必須學習輸出相較上一個時間步驟改變較小這一知識。</p>
+<p>儘管您可以通過仔細初始化來解決此問題，但將此問題構建到模型結構中則更加簡單。</p>
+<p>在時間序列分析中構建的模型，通常會預測下一個時間步驟中的值會如何變化，而非直接預測下一個值。類似地，深度學習中的<a href="https://arxiv.org/abs/1512.03385" class="external">殘差網絡</a>（或 ResNet）指的是，每一層都會添加到模型的累計結果中的架構。</p>
+<p>這就是利用“改變應該較小”這一知識的方式。</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/residual.png?hl=zh-cn" alt="帶有殘差連接的模型"></p>
+<p>本質上，這將初始化模型以匹配 <code>Baseline</code>。對於此任務，它可以幫助模型更快收斂，且性能稍好。</p>
+<p>該方法可以與本教程中討論的任何模型結合使用。</p>
+<p>這裡將它應用於 LSTM 模型，請注意 <a href="https://www.tensorflow.org/api_docs/python/tf/keras/initializers/Zeros?hl=zh-cn"><code>tf.initializers.zeros</code></a> 的使用，以確保初始的預測改變很小，並且不會壓制殘差連接。此處的梯度沒有破壞對稱性的問題，因為 <code>zeros</code> 僅用於最後一層。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/RNN2-2.png">
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/RNN2-3.png">
 <h4>性能</h4>
-<p>以下是这些多输出模型的整体性能。</p>
+<p>以下是這些多輸出模型的整體性能。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%80%A7%E8%83%BD2-1.png">
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%80%A7%E8%83%BD2-2.png">
-<p>以上性能是所有模型输出的平均值。</p>
+<p>以上性能是所有模型輸出的平均值。</p>
 <h2>多步模型</h2>
-<p>前几个部分中的单输出和多输出模型都对未来 1 小时进行<strong>单个时间步骤预测</strong>。</p>
-<p>本部分介绍如何扩展这些模型以进行<strong>多时间步骤预测</strong>。</p>
-<p>在多步预测中，模型需要学习预测一系列未来值。因此，与单步模型（仅预测单个未来点）不同，多步模型预测未来值的序列。</p>
-<p>大致有两种预测方法：</p>
+<p>前幾個部分中的單輸出和多輸出模型都對未來 1 小時進行<strong>單個時間步驟預測</strong>。</p>
+<p>本部分介紹如何擴展這些模型以進行<strong>多時間步驟預測</strong>。</p>
+<p>在多步預測中，模型需要學習預測一系列未來值。因此，與單步模型（僅預測單個未來點）不同，多步模型預測未來值的序列。</p>
+<p>大致有兩種預測方法：</p>
 <ol>
-<li>单次预测，一次预测整个时间序列。</li>
-<li>自回归预测，模型仅进行单步预测并将输出作为输入进行反馈。</li>
+<li>單次預測，一次預測整個時間序列。</li>
+<li>自回歸預測，模型僅進行單步預測並將輸出作為輸入進行反饋。</li>
 </ol>
-<p>在本部分中，所有模型都将预测<strong>所有输出时间步骤中的所有特征</strong>。</p>
-<p>对于多步模型而言，训练数据仍由每小时样本组成。但是，在这里，模型将在给定过去 24 小时的情况下学习预测未来 24 小时。</p>
-<p>下面是一个 <code>Window</code> 对象，该对象从数据集生成以下切片：</p>
+<p>在本部分中，所有模型都將預測<strong>所有輸出時間步驟中的所有特徵</strong>。</p>
+<p>對於多步模型而言，訓練數據仍由每小時樣本組成。但是，在這裡，模型將在給定過去 24 小時的情況下學習預測未來 24 小時。</p>
+<p>下面是一個 <code>Window</code> 對象，該對象從數據集生成以下切片：</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%A4%9A%E6%AD%A5%E6%A8%A1%E5%9E%8B1.png">
 <h3>基線</h3>
-<p>此任务的一个简单基线是针对所需数量的输出时间步骤重复上一个输入时间步骤：</p>
-<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_last.png?hl=zh-cn" alt="对每个输出步骤重复最后一次输入"></p>
+<p>此任務的一個簡單基線是針對所需數量的輸出時間步驟重複上一個輸入時間步驟：</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_last.png?hl=zh-cn" alt="對每個輸出步驟重複最後一次輸入"></p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A2-1.png">
-<p>由于此任务是在给定过去 24 小时的情况下预测未来 24 小时，另一种简单的方式是重复前一天，假设明天是类似的：</p>
-<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_repeat.png?hl=zh-cn" alt="重复前一天"></p>
+<p>由於此任務是在給定過去 24 小時的情況下預測未來 24 小時，另一種簡單的方式是重複前一天，假設明天是類似的：</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_repeat.png?hl=zh-cn" alt="重複前一天"></p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A2-2.png">
 <h3>單次模型</h3>
-<p>解决此问题的一种高级方法是使用“单次”模型，该模型可以在单个步骤中对整个序列进行预测。</p>
-<p>这可以使用 <code>OUT_STEPS*features</code> 输出单元作为 <code>tf.keras.layers.Dense</code> 高效实现。模型只需要将输出调整为所需的 <code>(OUTPUT_STEPS, features)</code>。</p>
+<p>解決此問題的一種高級方法是使用“單次”模型，該模型可以在單個步驟中對整個序列進行預測。</p>
+<p>這可以使用 <code>OUT_STEPS*features</code> 輸出單元作為 <code>tf.keras.layers.Dense</code> 高效實現。模型只需要將輸出調整為所需的 <code>(OUTPUT_STEPS, features)</code>。</p>
 <h4>線性</h4>
-<p>基于最后输入时间步骤的简单线性模型优于任何基线，但能力不足。该模型需要根据线性投影的单个输入时间步骤来预测 <code>OUTPUT_STEPS</code> 个时间步骤。它只能捕获行为的低维度切片，可能主要基于一天中的时间和一年中的时间。</p>
-<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_dense.png?hl=zh-cn" alt="从上一个时间步骤预测所有时间步骤"></p>
+<p>基於最後輸入時間步驟的簡單線性模型優於任何基線，但能力不足。該模型需要根據線性投影的單個輸入時間步驟來預測 <code>OUTPUT_STEPS</code> 個時間步驟。它只能捕獲行為的低維度切片，可能主要基於一天中的時間和一年中的時間。</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_dense.png?hl=zh-cn" alt="從上個時間步驟預測所有時間步驟"></p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AC%A1%E6%A8%A1%E5%9E%8B1.png">
 <h4>密集</h4>
-<p>在输入和输出之间添加 <code>tf.keras.layers.Dense</code> 可为线性模型提供更大能力，但仍仅基于单个输入时间步骤。</p>
+<p>在輸入和輸出之間添加 <code>tf.keras.layers.Dense</code> 可為線性模型提供更大能力，但仍僅基於單個輸入時間步驟。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AC%A1%E6%A8%A1%E5%9E%8B%E5%AF%86%E9%9B%861.png">
 <h4>CNN</h4>
-<p>卷积模型基于固定宽度的历史记录进行预测，可能比密集模型的性能更好，因为它可以看到随时间变化的情况：</p>
-<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_conv.png?hl=zh-cn" alt="卷积模型查看事物如何随时间变化。"></p>
+<p>卷積模型基於固定寬度的歷史記錄進行預測，可能比密集模型的性能更好，因為它可以看到隨時間變化的情況：</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_conv.png?hl=zh-cn" alt="卷積模型查看事物如何隨時間變化。"></p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AC%A1%E6%A8%A1%E5%9E%8BCNN1.png">
 <h4>RNN</h4>
-<p>如果循环模型与模型所做的预测相关，则可以学习使用较长的输入历史记录。在这里，模型将积累 24 小时的内部状态，然后对接下来的 24 小时进行单次预测。</p>
-<p>在此单次格式中，LSTM 只需要在最后一个时间步骤上生成输出，因此在 <code>tf.keras.layers.LSTM</code> 中设置 <code>return_sequences=False</code>。</p>
-<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_lstm.png?hl=zh-cn" alt="lstm 积累输入窗口的状态，并对未来 24 小时进行一次预测。"></p>
+<p>如果循環模型與模型所做的預測相關，則可以學習使用較長的輸入歷史記錄。在這裡，模型將積累 24 小時的內部狀態，然後對接下來的 24 小時進行單次預測。</p>
+<p>在此單次格式中，LSTM 只需要在最後一個時間步驟上生成輸出，因此在 <code>tf.keras.layers.LSTM</code> 中設置 <code>return_sequences=False</code>。</p>
+<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_lstm.png?hl=zh-cn" alt="lstm 積累輸入窗口的狀態，並對未來 24 小時進行一次預測。"></p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AC%A1%E6%A8%A1%E5%9E%8BRNN.png">
-<h3>高级：自回归模型</h3>
-<p>上述模型均在单个步骤中预测整个输出序列。</p>
-<p>在某些情况下，模型将此预测分解为单个时间步骤可能比较有帮助。 然后，模型的每个输出都可以在每个步骤反馈给自己，并可以根据前一个输出进行预测，就像经典的使用循环神经网络生成序列中介绍的一样。</p>
-<p>此类模型的一个明显优势是可以将其设置为生成长度不同的输出。</p>
-<p>您可以采用本教程前半部分中训练的任意一个单步多输出模型，并在自回归反馈循环中运行，但是在这里，您将重点关注经过显式训练的模型。</p>
-<p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_autoregressive.png?hl=zh-cn" alt="将模型的输出反馈到其输入"></p>
-<h4>RNN</h4>
-<p>本教程仅构建自回归 RNN 模型，但是该模式可以应用于设计为输出单个时间步骤的任何模型。</p>
-<p>模型将具有与之前的单步 LSTM 模型相同的基本形式：一个<code>tf.keras.layers.LSTM</code> ，后接一个将 <code>LSTM</code> 层输出转换为模型预测的<code>tf.keras.layers.Dense</code> 层。</p>
-<p></code>是封装在更高级 <code>tf.keras.layers.RNN</code> 中的 <code>tf.keras.layers.LSTMCell</code>，它为您管理状态和序列结果（有关详细信息，请参阅使用 Keras 的循环神经网络 (RNN)指南）。</p>
-<p>在这种情况下，模型必须手动管理每个步骤的输入，因此它直接将 <code>tf.keras.layers.LSTMCell</code> 用于较低级别的单个时间步骤接口。</p>
-<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN1.png">
-
-<p>该模型需要的第一个方法是 <code>warmup</code>，用来根据输入初始化其内部状态。训练后，此状态将捕获输入历史记录的相关部分。这等效于先前的单步 <code>LSTM</code> 模型：</p>
+<h3>高級：自回歸模型</h3>
+<p>上述模型均在單個步驟中預測整個輸出序列。</p>
+<p>在某些情況下，模型將此預測分解為單個時間步驟可能比較有幫助。 然後，模型的每個輸出都可以在每個步驟反饋給自己，並可以根據前一個輸出進行預測，就像經典的使用循環神經網絡生成序列中介紹的一樣。</p>
+<p>此類模型的一個明顯優勢是可以將其設置為生成長度不同的輸出。</p>
+<p>您可以採用本教程前半部分中訓練的任意一個單步多輸出模型，並在自回歸反饋循環中運行，但是在這裡，您將重點關注經過顯式訓練的模型。</p>
+<p><img src="https://www.tensorflow.org/static/tutorial
+<p>該模型需要的第一個方法是 <code>warmup</code>，用來根據輸入初始化其內部狀態。訓練後，此狀態將捕獲輸入歷史記錄的相關部分。這等效於先前的單步 <code>LSTM</code> 模型：</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN2.png">
-<p>此方法返回单个时间步骤预测以及 <code>LSTM</code> 的内部状态：</p>
+<p>此方法返回單個時間步驟預測以及 <code>LSTM</code> 的內部狀態：</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN3.png">
-<p>有了 <code>RNN</code> 的状态和初始预测，您现在可以继续迭代模型，并在每一步将预测作为输入反馈给模型。</p>
-<p>收集输出预测的最简单方式是使用 Python 列表，并在循环后使用 <code>tf.stack</code>。</p>
-<p>注：像这样堆叠 Python 列表仅适用于 Eager-Execution，使用 <code>Model.compile(..., run_eagerly=True)</code> 进行训练，或使用固定长度的输出。对于动态输出长度，您需要使用 <code>tf.TensorArray</code> 代替 Python 列表，并用 <code>tf.range</code> 代替 Python <code>range</code>。</p>
+<p>有了 <code>RNN</code> 的狀態和初始預測，您現在可以繼續迭代模型，並在每一步將預測作為輸入反饋給模型。</p>
+<p>收集輸出預測的最簡單方式是使用 Python 列表，並在循環後使用 <code>tf.stack</code>。</p>
+<p>注：像這樣堆疊 Python 列表僅適用於 Eager-Execution，使用 <code>Model.compile(..., run_eagerly=True)</code> 進行訓練，或使用固定長度的輸出。對於動態輸出長度，您需要使用 <code>tf.TensorArray</code> 代替 Python 列表，並用 <code>tf.range</code> 代替 Python <code>range</code>。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN4.png">
-<p>在示例输入上运行此模型：</p>
+<p>在示例輸入上運行此模型：</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN5.png">
-<p>现在，训练模型：</p>
+<p>現在，訓練模型：</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN6.png">
 <h3>性能</h3>
-<p>在这个问题上，作为模型复杂性的函数，返回值在明显递减。</p>
+<p>在這個問題上，作為模型複雜性的函數，返回值在明顯遞減。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD1.png">
-<p>本教程前半部分的多输出模型的指标显示了所有输出特征的平均性能。这些性能类似，但在输出时间步骤上也进行了平均。 </p>
+<p>本教程前半部分的多輸出模型的指標顯示了所有輸出特徵的平均性能。這些性能類似，但在輸出時間步驟上也進行了平均。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD2.png">
-<p>从密集模型到卷积模型和循环模型，所获得的增益只有百分之几（如果有的话），而自回归模型的表现显然更差。因此，在<strong>这个</strong>问题上使用这些更复杂的方法可能并不值得，但如果不尝试就无从知晓，而且这些模型可能会对<strong>您的</strong>问题有所帮助。</p>
+<p>從密集模型到卷積模型和循環模型，所獲得的增益只有百分之幾（如果有的話），而自回歸模型的表現顯然更差。因此，在<strong>這個</strong>問題上使用這些更複雜的方法可能並不值得，但如果不嘗試就無從知曉，而且這些模型可能會對<strong>您的</strong>問題有所幫助。</p>
+<h2>可能遇到的問題<h2>
+<p>在性能的部份程式碼可能因新舊版本而發生錯誤，如下圖所示:</p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202024-12-23%20202502.png">
+<p>解決方法</p>
+<p>使用 <code>metric_name = 'compile_metrics'</code> 來設定指標名稱，並根據此名稱取得 <code>metric_index</code>。</p>
 <h2>後續步驟</h2>
-<p>本教程是使用 TensorFlow 进行时间序列预测的简单介绍。</p>
-<p>要了解更多信息，请参阅：</p>
+<p>本教程是使用 TensorFlow 進行時間序列預測的簡單介紹。</p>
+<p>要了解更多信息，請參閱：</p>
 <ul>
 <li><a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/" class="external">Hands-on Machine Learning with Scikit-Learn, Keras, and TensorFlow</a>（第 2 版）第 15 章。</li>
-<li><a href="https://www.manning.com/books/deep-learning-with-python">Python 深度学习</a>第 6 章。</li>
-<li><a href="https://www.udacity.com/course/intro-to-tensorflow-for-deep-learning--ud187" class="external">Udacity 的 Intro to TensorFlow for deep learning</a> 第 8 课，包括<a href="https://github.com/tensorflow/examples/tree/master/courses/udacity_intro_to_tensorflow_for_deep_learning" class="external">练习笔记本</a>。</li>
+<li><a href="https://www.manning.com/books/deep-learning-with-python">Python 深度學習</a>第 6 章。</li>
+<li><a href="https://www.udacity.com/course/intro-to-tensorflow-for-deep-learning--ud187" class="external">Udacity 的 Intro to TensorFlow for deep learning</a> 第 8 課，包括<a href="https://github.com/tensorflow/examples/tree/master/courses/udacity_intro_to_tensorflow_for_deep_learning" class="external">練習筆記本</a>。</li>
 </ul>
-<p>还要记住，您可以在 TensorFlow 中实现任何经典时间序列模型，本教程仅重点介绍了 TensorFlow 的内置功能。</p>
+<p>還要記住，您可以在 TensorFlow 中實現任何經典時間序列模型，本教程僅重點介紹了 TensorFlow 的內建功能。</p>
 
 
 
