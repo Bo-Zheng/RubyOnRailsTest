@@ -233,31 +233,32 @@
 </ul></li>
 </ol>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/lstm_many_window.png?hl=zh-cn" alt="lstm在每个时间步后进行预测"></p>
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF1.png">
 
-####################
 <p><code>return_sequences=True</code> 时，模型一次可以在 24 小时的数据上进行训练。</p>
 <p>注：这将对模型的性能给出悲观看法。在第一个时间步骤中，模型无法访问之前的步骤，因此无法比之前展示的简单 <code>linear</code> 和 <code>dense</code> 模型表现得更好。</p>
-####################
-####################
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF2.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF3.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF4.png">
 <h3>性能</h3>
+*******************************************************
 <p>使用此数据集时，通常每个模型的性能都比之前的模型稍好一些：</p>
-####################
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%80%A7%E8%83%BD.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%80%A7%E8%83%BD2.png">
 <h3>多輸出模型</h3>
 <p>到目前为止，所有模型都为单个时间步骤预测了单个输出特征，<code>T (degC)</code>。</p>
 <p>只需更改输出层中的单元数并调整训练窗口，以将所有特征包括在 <code>labels</code> (<code>example_labels</code>) 中，就可以将所有上述模型转换为预测多个特征：</p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%A4%9A%E8%BC%B8%E5%87%BA%E6%A8%A1%E5%9E%8B1.png">
 <p>请注意，上面标签的 <code>features</code> 轴现在具有与输入相同的深度，而不是 1。</p>
 <h4>基線</h4>
 <p>此处可以使用相同的基线模型 (<code>Baseline</code>)，但这次重复所有特征，而不是选择特定的 <code>label_index</code>：</p>
-####################
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%A4%9A%E8%BC%B8%E5%87%BA%E6%A8%A1%E5%9E%8B2.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%A4%9A%E8%BC%B8%E5%87%BA%E6%A8%A1%E5%9E%8B3.png">
 <h4>密集</h4>
-####################
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%862-1.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%AF%86%E9%9B%862-2.png">
 <h4>RNN</h4>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/RNN2-1.png">
 <<h4>高级：残差连接</h4>
 <p>先前的 <code>Baseline</code> 模型利用了以下事实：序列在时间步骤之间不会剧烈变化。到目前为止，本教程中训练的每个模型都进行了随机初始化，然后必须学习输出相较上一个时间步骤改变较小这一知识。</p>
 <p>尽管您可以通过仔细初始化来解决此问题，但将此问题构建到模型结构中则更加简单。</p>
@@ -267,12 +268,12 @@
 <p>本质上，这将初始化模型以匹配 <code>Baseline</code>。对于此任务，它可以帮助模型更快收敛，且性能稍好。</p>
 <p>该方法可以与本教程中讨论的任何模型结合使用。</p>
 <p>这里将它应用于 LSTM 模型，请注意 <a href="https://www.tensorflow.org/api_docs/python/tf/keras/initializers/Zeros?hl=zh-cn"><code>tf.initializers.zeros</code></a> 的使用，以确保初始的预测改变很小，并且不会压制残差连接。此处的梯度没有破坏对称性的问题，因为 <code>zeros</code> 仅用于最后一层。</p>
-####################
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/RNN2-2.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/RNN2-3.png">
 <h4>性能</h4>
 <p>以下是这些多输出模型的整体性能。</p>
-####################
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%80%A7%E8%83%BD2-1.png">
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%80%A7%E8%83%BD2-2.png">
 <p>以上性能是所有模型输出的平均值。</p>
 <h2>多步模型</h2>
 <p>前几个部分中的单输出和多输出模型都对未来 1 小时进行<strong>单个时间步骤预测</strong>。</p>
@@ -286,33 +287,33 @@
 <p>在本部分中，所有模型都将预测<strong>所有输出时间步骤中的所有特征</strong>。</p>
 <p>对于多步模型而言，训练数据仍由每小时样本组成。但是，在这里，模型将在给定过去 24 小时的情况下学习预测未来 24 小时。</p>
 <p>下面是一个 <code>Window</code> 对象，该对象从数据集生成以下切片：</p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%A4%9A%E6%AD%A5%E6%A8%A1%E5%9E%8B1.png">
 <h3>基線</h3>
 <p>此任务的一个简单基线是针对所需数量的输出时间步骤重复上一个输入时间步骤：</p>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_last.png?hl=zh-cn" alt="对每个输出步骤重复最后一次输入"></p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A2-1.png">
 <p>由于此任务是在给定过去 24 小时的情况下预测未来 24 小时，另一种简单的方式是重复前一天，假设明天是类似的：</p>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_repeat.png?hl=zh-cn" alt="重复前一天"></p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%9F%BA%E7%B7%9A2-2.png">
 <h3>單次模型</h3>
 <p>解决此问题的一种高级方法是使用“单次”模型，该模型可以在单个步骤中对整个序列进行预测。</p>
 <p>这可以使用 <code>OUT_STEPS*features</code> 输出单元作为 <code>tf.keras.layers.Dense</code> 高效实现。模型只需要将输出调整为所需的 <code>(OUTPUT_STEPS, features)</code>。</p>
 <h4>線性</h4>
 <p>基于最后输入时间步骤的简单线性模型优于任何基线，但能力不足。该模型需要根据线性投影的单个输入时间步骤来预测 <code>OUTPUT_STEPS</code> 个时间步骤。它只能捕获行为的低维度切片，可能主要基于一天中的时间和一年中的时间。</p>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_dense.png?hl=zh-cn" alt="从上一个时间步骤预测所有时间步骤"></p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AC%A1%E6%A8%A1%E5%9E%8B1.png">
 <h4>密集</h4>
 <p>在输入和输出之间添加 <code>tf.keras.layers.Dense</code> 可为线性模型提供更大能力，但仍仅基于单个输入时间步骤。</p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AC%A1%E6%A8%A1%E5%9E%8B%E5%AF%86%E9%9B%861.png">
 <h4>CNN</h4>
 <p>卷积模型基于固定宽度的历史记录进行预测，可能比密集模型的性能更好，因为它可以看到随时间变化的情况：</p>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_conv.png?hl=zh-cn" alt="卷积模型查看事物如何随时间变化。"></p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AC%A1%E6%A8%A1%E5%9E%8BCNN1.png">
 <h4>RNN</h4>
 <p>如果循环模型与模型所做的预测相关，则可以学习使用较长的输入历史记录。在这里，模型将积累 24 小时的内部状态，然后对接下来的 24 小时进行单次预测。</p>
 <p>在此单次格式中，LSTM 只需要在最后一个时间步骤上生成输出，因此在 <code>tf.keras.layers.LSTM</code> 中设置 <code>return_sequences=False</code>。</p>
 <p><img src="https://www.tensorflow.org/static/tutorials/structured_data/images/multistep_lstm.png?hl=zh-cn" alt="lstm 积累输入窗口的状态，并对未来 24 小时进行一次预测。"></p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%96%AE%E6%AC%A1%E6%A8%A1%E5%9E%8BRNN.png">
 <h3>高级：自回归模型</h3>
 <p>上述模型均在单个步骤中预测整个输出序列。</p>
 <p>在某些情况下，模型将此预测分解为单个时间步骤可能比较有帮助。 然后，模型的每个输出都可以在每个步骤反馈给自己，并可以根据前一个输出进行预测，就像经典的使用循环神经网络生成序列中介绍的一样。</p>
@@ -324,25 +325,25 @@
 <p>模型将具有与之前的单步 LSTM 模型相同的基本形式：一个<code>tf.keras.layers.LSTM</code> ，后接一个将 <code>LSTM</code> 层输出转换为模型预测的<code>tf.keras.layers.Dense</code> 层。</p>
 <p></code>是封装在更高级 <code>tf.keras.layers.RNN</code> 中的 <code>tf.keras.layers.LSTMCell</code>，它为您管理状态和序列结果（有关详细信息，请参阅使用 Keras 的循环神经网络 (RNN)指南）。</p>
 <p>在这种情况下，模型必须手动管理每个步骤的输入，因此它直接将 <code>tf.keras.layers.LSTMCell</code> 用于较低级别的单个时间步骤接口。</p>
-####################
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN1.png">
+
 <p>该模型需要的第一个方法是 <code>warmup</code>，用来根据输入初始化其内部状态。训练后，此状态将捕获输入历史记录的相关部分。这等效于先前的单步 <code>LSTM</code> 模型：</p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN2.png">
 <p>此方法返回单个时间步骤预测以及 <code>LSTM</code> 的内部状态：</p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN3.png">
 <p>有了 <code>RNN</code> 的状态和初始预测，您现在可以继续迭代模型，并在每一步将预测作为输入反馈给模型。</p>
 <p>收集输出预测的最简单方式是使用 Python 列表，并在循环后使用 <code>tf.stack</code>。</p>
 <p>注：像这样堆叠 Python 列表仅适用于 Eager-Execution，使用 <code>Model.compile(..., run_eagerly=True)</code> 进行训练，或使用固定长度的输出。对于动态输出长度，您需要使用 <code>tf.TensorArray</code> 代替 Python 列表，并用 <code>tf.range</code> 代替 Python <code>range</code>。</p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN4.png">
 <p>在示例输入上运行此模型：</p>
-####################
+***************************************************
 <p>现在，训练模型：</p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN6.png">
 <h3>性能</h3>
 <p>在这个问题上，作为模型复杂性的函数，返回值在明显递减。</p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD1.png">
 <p>本教程前半部分的多输出模型的指标显示了所有输出特征的平均性能。这些性能类似，但在输出时间步骤上也进行了平均。 </p>
-####################
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD2.png">
 <p>从密集模型到卷积模型和循环模型，所获得的增益只有百分之几（如果有的话），而自回归模型的表现显然更差。因此，在<strong>这个</strong>问题上使用这些更复杂的方法可能并不值得，但如果不尝试就无从知晓，而且这些模型可能会对<strong>您的</strong>问题有所帮助。</p>
 <h2>後續步驟</h2>
 <p>本教程是使用 TensorFlow 进行时间序列预测的简单介绍。</p>
