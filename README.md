@@ -241,7 +241,6 @@
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF3.png">
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E5%BE%AA%E7%92%B0%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF4.png">
 <h3>性能</h3>
-*******************************************************
 <p>使用此数据集时，通常每个模型的性能都比之前的模型稍好一些：</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%80%A7%E8%83%BD.png">
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E6%80%A7%E8%83%BD2.png">
@@ -336,7 +335,7 @@
 <p>注：像这样堆叠 Python 列表仅适用于 Eager-Execution，使用 <code>Model.compile(..., run_eagerly=True)</code> 进行训练，或使用固定长度的输出。对于动态输出长度，您需要使用 <code>tf.TensorArray</code> 代替 Python 列表，并用 <code>tf.range</code> 代替 Python <code>range</code>。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN4.png">
 <p>在示例输入上运行此模型：</p>
-***************************************************
+<img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN5.png">
 <p>现在，训练模型：</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8BRNN6.png">
 <h3>性能</h3>
