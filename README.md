@@ -330,7 +330,7 @@
 <p>本教程前半部分的多輸出模型的指標顯示了所有輸出特徵的平均性能。這些性能類似，但在輸出時間步驟上也進行了平均。</p>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%87%AA%E5%9B%9E%E6%AD%B8%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD2.png">
 <p>從密集模型到卷積模型和循環模型，所獲得的增益只有百分之幾（如果有的話），而自回歸模型的表現顯然更差。因此，在<strong>這個</strong>問題上使用這些更複雜的方法可能並不值得，但如果不嘗試就無從知曉，而且這些模型可能會對<strong>您的</strong>問題有所幫助。</p>
-<h2>可能遇到的問題<h2>
+<h2>可能遇到的問題</h2>
 <h4>在性能的部份程式碼可能因新舊版本而發生錯誤，如下圖所示:</h4>
 <img src="https://github.com/Bo-Zheng/RubyOnRailsTest/blob/main/img/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202024-12-23%20202502.png">
 <h4>解決方法</h4>
